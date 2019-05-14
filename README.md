@@ -7,3 +7,5 @@ This is short course.
 Here I will include all the content. 
 
 You can find the slices here. 
+
+[go to](test.html)
