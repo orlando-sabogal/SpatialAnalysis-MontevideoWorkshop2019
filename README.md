@@ -9,4 +9,4 @@ Here I will include all the content.
 You can find the slices here. 
 
 [go to](test.html)
-[slides](/Presentations/spatial-analysis-presentation.html)
+[slides](Presentations/spatial-analysis-presentation.html)
