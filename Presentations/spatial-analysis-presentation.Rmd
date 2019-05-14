@@ -1,11 +1,12 @@
 ---
-title: "Presentation Ninja"
-subtitle: "⚔<br/>with xaringan"
-author: "Yihui Xie"
-date: "2016/12/12 (updated: `r Sys.Date()`)"
+title: "Spatial Analysis"
+subtitle: "And a lot of R code"
+author: "Orlando Sabogal"
+date: "2019/05 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     css: ["default", "SomeFonts.css"]
+    seal: false
     lib_dir: libs
     nature:
       highlightStyle: github
@@ -14,15 +15,24 @@ output:
 ---
 class: inverse, bottom, right
 
-<h1 align="center"> Geografía Computacional </h1>
+<h1 align="center"> Spatial Analysis Using R </h1>
+
 <br> <br> <br> <br>
 
-<h2> Vamos  Usar Mucho R </h2>
+<h3> Montevideo - June 2019 </h3>
+
 <hr width = 300, align = "right">
+
 <p> 
-  Montevide - 
-  <a href="https://www.w3schools.com">@An</a> 
-</p>
+  <a href="https://orlando-sabogal.github.io/">Orlando Sabogal</a> 
+  -
+  <a href="https://twitter.com/AntonioSabogal">@AntonioSabogal</a> 
+  -
+  <a href="https://github.com/orlando-sabogal">Github</a> 
+<p>
+
+???
+This is the first silde
 
 
 ---

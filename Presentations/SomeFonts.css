@@ -9,4 +9,14 @@ h1, h2, h3 {
   font-family: 'Yanone Kaffeesatz';
   font-weight: normal;
 }
+
+a { 
+  font-family: 'Roboto', sans-serif;
+  color: #9b9b9b; } 
+  
+a:hover { 
+  color: #424242;
+  font-size: 107%;
+}
+
 .remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace; }
