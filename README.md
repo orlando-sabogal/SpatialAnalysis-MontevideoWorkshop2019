@@ -1,6 +1,6 @@
-# Spatia lAnalysis
-##Workshop
-##Montevideo (Uruguay) June 2019.
+# Spatial Analysis
+## Workshop
+## Montevideo (Uruguay) June 2019.
 
 This is short course. 
 
