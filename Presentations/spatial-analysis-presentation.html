@@ -30,64 +30,106 @@ class: inverse, bottom, right
 
 ???
 This is the first silde
+Introduce myself
 
 
 ---
 
-Some Intro
-
-
-```r
-head(mtcars)
-```
-
-```
-##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
-## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
-## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
-## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
-## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
-## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
-```
+#Spatial data is special
 
 
 ---
-Empty
+#Visualization
 
 
-```r
-Test &lt;- mtcars
-Test2 &lt;- Test[c(1:10),]
-```
+---
+#Statistical models
 
 
-```r
-library(tidyverse)
-```
+---
+#Data wrangling
 
-```
-## ── Attaching packages ─────────────────── tidyverse 1.2.1 ──
-```
+---
+#Content 
 
-```
-## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.8
-## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
-```
+This course is about using data with geographic properties. 
 
-```
-## ── Conflicts ────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-```
+.pull-left[
+
+###You will learn
+
+- Some general concepts. 
+- Key Libraries
+- To make reproducible and reusable maps
+- That *the sky is the limit*
+- Hopefully, **to learn R**.
+
+]
+
+.pull-right[
+
+###You will not learn
+
+- Geographic Statistics and sound methods.
+- To write efficient R code.&lt;sup&gt;*&lt;/sup&gt;
+- To handle big data.
+- To solve every possible problem. 
+
+]
+
+.footnote[[*] This is up to you.]
+
+---
+#libraries
+
+--
+sf  &lt;br&gt; &lt;/br&gt;
+--
+sf + *The Tidyverse* &lt;br&gt; &lt;/br&gt;
+--
+sf + *The Tidyverse* + notebooks &lt;br&gt; &lt;/br&gt;
+--
+tmap &lt;br&gt; &lt;/br&gt;
+--
+leaflet &lt;br&gt; &lt;/br&gt;
 
 
 ---
 class: inverse, center, middle
 
 # sf: simple features
+
+
+
+---
+class: inverse, center, middle
+
+#tmap
+##(I love it)
+
+
+---
+class: inverse, center, middle
+
+#leaflet
+
+---
+class: inverse, center, middle
+background-image: url(CrimesLondonsHeatmap.png)
+background-size: contain
+
+---
+#The sky is the limit!
+
+
+---
+class: center, middle
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

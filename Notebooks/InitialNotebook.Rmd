@@ -1,0 +1,30 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+
+```
+
+Los datos en */montevideorural_shp* y en */montevideourbano_shp* fueron tomados del [Cátalogo dde datos abiertos](https://catalogodatos.gub.uy/dataset/shapes-del-parcelario-rural-y-urbano) de Uruguay. 
+
+Los datos en */Vectoriales_2011* fueron tomados del [Instituto nacional de estadística](http://ine.gub.uy/mapas-vectoriales) 
+
+También existe el [geoportal](http://geoportal.mtop.gub.uy/geoservicios)
+La [La Encuesta continua de hogares](http://www.ine.gub.uy/web/guest/encuesta-continua-de-hogares1)
+
+
+[Accidentes](https://catalogodatos.gub.uy/dataset/accidentes-de-transito-montevideo)
+[Catálogo](https://catalogodatos.gub.uy/dataset?res_format=SHP)
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+

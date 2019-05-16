@@ -33,31 +33,107 @@ class: inverse, bottom, right
 
 ???
 This is the first silde
+Introduce myself
 
 
 ---
 
-Some Intro
-
-```{r}
-head(mtcars)
-```
+#Spatial data is special
 
 
 ---
-Empty
+#Visualization
 
-```{r}
-Test <- mtcars
-Test2 <- Test[c(1:10),]
-```
 
-```{r}
-library(tidyverse)
-```
+---
+#Statistical models
+
+
+---
+#Data wrangling
+
+---
+#Content 
+
+This course is about using data with geographic properties. 
+
+.pull-left[
+
+###You will learn
+
+- Some general concepts. 
+- Key Libraries
+- To make reproducible and reusable maps
+- That *the sky is the limit*
+- Hopefully, **to learn R**.
+
+]
+
+.pull-right[
+
+###You will not learn
+
+- Geographic Statistics and sound methods.
+- To write efficient R code.<sup>*</sup>
+- To handle big data.
+- To solve every possible problem. 
+
+]
+
+.footnote[[*] This is up to you.]
+
+---
+#libraries
+
+--
+sf  <br> </br>
+--
+sf + *The Tidyverse* <br> </br>
+--
+sf + *The Tidyverse* + notebooks <br> </br>
+--
+tmap <br> </br>
+--
+leaflet <br> </br>
 
 
 ---
 class: inverse, center, middle
 
 # sf: simple features
+
+
+
+---
+class: inverse, center, middle
+
+#tmap
+##(I love it)
+
+
+---
+class: inverse, center, middle
+
+#leaflet
+
+---
+class: inverse, center, middle
+background-image: url(CrimesLondonsHeatmap.png)
+background-size: contain
+
+---
+#The sky is the limit!
+
+
+---
+class: center, middle
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
+
+
+
+
