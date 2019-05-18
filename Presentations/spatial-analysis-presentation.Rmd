@@ -74,6 +74,7 @@ This course is about using data with geographic properties.
 ###You will not learn
 
 - Geographic Statistics and sound methods.
+- *raster* data.
 - To write efficient R code.<sup>*</sup>
 - To handle big data.
 - To solve every possible problem. 
@@ -102,6 +103,22 @@ class: inverse, center, middle
 
 # sf: simple features
 
+
+---
+#CRS: Coordinate Reference System
+
+Can be:
+- *geographic* (distance is not in meters)
+- *projected* (distance is in meters) 
+
+Options:
+
+```{r, eval=FALSE}
+
+st_set_crs()
+st_transform()
+
+```
 
 
 ---

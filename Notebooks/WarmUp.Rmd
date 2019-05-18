@@ -1,0 +1,244 @@
+---
+title: "Warm Up"
+output: 
+  html_notebook: 
+    number_sections: yes
+    toc: yes
+---
+
+<br/> 
+In this document I will show some basic functions from the **sf** package so you can have the intuition of how it works and what kind of operations can be performed. You will learn how to *read* geographic data into your R workflow and how to *write* geographic data in you computer. In addition you will see a workflow analysis and the map making process. <br/>
+You cand download all files used from my [Github Repository](https://github.com/orlando-sabogal/SpatialAnalysis-MontevideoWorkshop2019). Please notice that all datasets are in the folder */Notebooks/Montevideo_Data*.
+
+```{r}
+library(sf)
+library(tmap)
+library(tidyverse)
+```
+
+```{r}
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data")
+#The path to the working directory should change according to where you allocated the repository in your computer. 
+
+#setwd('..')
+```
+
+```{r}
+getwd()
+```
+
+
+#Points (Accidents)
+
+The most common type for spatial datasets are ESRI shape files. You can use the *st_read()* function and set the *dsn* argument (data source name).
+
+```{r}
+
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Accidentes2006-2010")
+Accidents <- st_read("accidentes2006-2010.shp")
+
+```
+
+The above function created the object *Accidents*. As usual, you can print the object in your console (or rmarkdown document) by typing the name of the object or get a general overview with **str()** and **summary()** . An easy way to make a map is by passing the *sf* object to the **plot()** function.
+
+```{r}
+Accidents
+```
+
+**Question:** Why are not the 41121?
+
+```{r}
+str(Accidents)
+```
+
+
+```{r}
+summary(Accidents)
+```
+
+```{r}
+plot(Accidents)
+```
+
+By default, **plot()** creates map for every variable within the file. Use **st_geometry** to get only the points. 
+
+```{r}
+plot(st_geometry(Accidents))
+```
+
+```{r}
+plot(st_geometry(Accidents), cex = 0.05, col = "blue")
+```
+
+You can add some settings to the maps. Nevetheless, I personally prefer to use *tmap*. 
+
+
+##Projections
+
+What is the projection of this object?
+
+```{r}
+st_crs(Accidents)
+```
+
+
+```{r}
+#st_set_crs
+#AllCRS <- rgdal::make_EPSG()
+#UTM 21 SUR
+#32721
+#https://epsg.io/32721
+#https://www.spatialreference.org/ref/epsg/wgs-84-utm-zone-21s/
+
+Accidents = st_set_crs(Accidents, 32721)
+st_crs(Accidents)
+```
+
+##Tidyverse in action
+
+```{r}
+Accidents %>% names()
+```
+
+```{r}
+Accidents %>% group_by(ANIO) %>% summarise(Total = n())
+```
+
+```{r}
+AccidentsData <- Accidents
+st_geometry(AccidentsData) <- NULL
+
+AccidentsData %>% group_by(ANIO) %>% summarise(Total = n())
+```
+
+```{r}
+AccidentsData <- Accidents
+AccidentsData %>% group_by(ANIO) %>% summarise(Total = n()) %>% st_set_geometry(NULL)
+```
+
+```{r}
+Resumen <- AccidentsData %>% group_by(ANIO) %>%
+  summarise(Total = n()) %>% 
+  st_set_geometry(NULL)
+```
+
+```{r}
+ggplot(data = Resumen) + geom_bar(aes(x = ANIO, y = Total), stat = "identity") +
+  xlab("Años") + ylab("Accidentes") + theme_classic()
+```
+
+```{r}
+Esquinas <- Accidents %>% group_by(ESQUINA) %>% 
+  summarise(Total = n()) %>% 
+  st_set_geometry(NULL) %>% 
+  arrange(desc(Total))
+```
+
+```{r}
+Esquinas
+```
+
+```{r}
+##Improve this plot!
+
+Esquinas %>% filter(Total >60) %>%  
+  ggplot() + 
+    geom_bar(aes(x=ESQUINA, y = Total), stat = "identity")
+```
+
+```{r}
+Accidentes2007 <- Accidents %>% filter(ANIO == "2007")
+Accidentes2010 <- Accidents %>% filter(ANIO == "2010")
+
+Graves <- Accidents %>% filter(TIPO == "GRAVE")
+
+Graves2008 <- Accidents %>% filter(TIPO == "GRAVE" & ANIO == "2008")
+
+
+```
+
+
+#Polygons (States)
+
+```{r}
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Vectoriales_2011")
+Zones <- st_read("ine_depto.shp")
+```
+
+```{r}
+plot(st_geometry(Zones))
+```
+
+
+```{r}
+Montevideo <- Zones[Zones$NOMBRE == "MONTEVIDEO",]
+plot(st_geometry(Montevideo))
+```
+
+```{r}
+library(tidyverse)
+Montevideo <- Zones %>% filter(NOMBRE == "MONTEVIDEO")
+plot(st_geometry(Montevideo))
+```
+
+```{r}
+st_crs(Montevideo)
+st_crs(Zones)
+
+st_crs(Montevideo) == st_crs(Accidentes)
+```
+
+```{r}
+Montevideo <- st_set_crs(Montevideo,32721)
+st_crs(Montevideo) == st_crs(Accidentes)
+```
+
+```{r}
+plot(st_geometry(Montevideo))
+plot(st_geometry(Accidentes), add = TRUE)
+```
+
+##The Tidyverse again
+
+
+#Points in Polygons
+
+
+#A better map
+
+
+
+#Rethinking Points
+
+
+
+
+Vamos a hacer algunos mapas bonitos. 
+Creat an animation using 
+
+```{r}
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/montevideourbano_shp")
+
+MontevideoUrbano <- st_read("MontevideoUrbano.shp")
+```
+
+
+```{r}
+
+```
+
+<br/>
+
+#Data Sources
+
+All data used in this workflow was downloaded from **Open Source** [pltaforms](https://catalogodatos.gub.uy/dataset?res_format=SHP)
+
+- Data in */montevideorural_shp* and */montevideourbano_shp* were retrieved from the Uruguay [Cátalogo dde datos abiertos](https://catalogodatos.gub.uy/dataset/shapes-del-parcelario-rural-y-urbano).
+- Data in */Vectoriales_2011* were retrieved from [Instituto nacional de estadística](http://ine.gub.uy/mapas-vectoriales) 
+- Data in */Accidentes2006-2010* were taken from [Catálogo de datos abiertos]((https://catalogodatos.gub.uy/dataset/accidentes-de-transito-montevideo)
+- Data in */CyclingMontevideoData* were taken from [Catálogo de datos abiertos](https://catalogodatos.gub.uy/dataset/bicicircuitos-bicicletarios-estaciones-y-talleres-de-reparacion)
+Another interesting sources are:
+
+- [geoportal](http://geoportal.mtop.gub.uy/geoservicios)
+- [La Encuesta continua de hogares](http://www.ine.gub.uy/web/guest/encuesta-continua-de-hogares1)
+
