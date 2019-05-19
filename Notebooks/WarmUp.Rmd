@@ -291,7 +291,7 @@ plot(UruguayStations[,6])
 
 #A better map
 
-So far we have been using the **plot()** function to create maps. **plot()** makes the homework but 
+So far we have been using the **plot()** function to create maps. **plot()** makes the homework but it feels quite limited. I prefer the **tmap** library and later on the workshop we'll cover a brief [tmap Tutorial](https://orlando-sabogal.github.io/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/tmap-tutorial.nb.html). For now, I just want you know that you have the possibility to create atonishing and beautiful maps. But pior to that, there is always a bunch of data processing and wragling that we can do with the help os **sf** and **tidyverse.**
 
 ```{r}
 
