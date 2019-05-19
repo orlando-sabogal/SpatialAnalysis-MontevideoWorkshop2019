@@ -154,7 +154,7 @@ Graves <- Accidents %>% filter(TIPO == "GRAVE")
 
 Graves2008 <- Accidents %>% filter(TIPO == "GRAVE" & ANIO == "2008")
 
-
+Graves2006o2009 <- Accidents %>% filter(ANIO %in% c("2006","2009"))
 ```
 
 
@@ -176,7 +176,6 @@ plot(st_geometry(Montevideo))
 ```
 
 ```{r}
-library(tidyverse)
 Montevideo <- Zones %>% filter(NOMBRE == "MONTEVIDEO")
 plot(st_geometry(Montevideo))
 ```
@@ -185,23 +184,57 @@ plot(st_geometry(Montevideo))
 st_crs(Montevideo)
 st_crs(Zones)
 
-st_crs(Montevideo) == st_crs(Accidentes)
+st_crs(Montevideo) == st_crs(Accidents)
 ```
 
 ```{r}
 Montevideo <- st_set_crs(Montevideo,32721)
-st_crs(Montevideo) == st_crs(Accidentes)
+st_crs(Montevideo) == st_crs(Accidents)
 ```
 
 ```{r}
 plot(st_geometry(Montevideo))
-plot(st_geometry(Accidentes), add = TRUE)
+plot(st_geometry(Accidents), add = TRUE)
 ```
 
 ##The Tidyverse again
 
+```{r}
+Zones %>% select(AREA_KM2_) %>% summary()
+```
+
+```{r}
+Zones %>% 
+  ggplot(aes(x=AREA_KM2_)) +
+    geom_histogram(breaks=seq(0,15000,1000))
+```
+
+```{r}
+BiggesStates <- Zones %>% filter(AREA_KM2_ > 13000)
+```
+
+```{r}
+#Zones <- Zones %>% mutate(Uruguay = 1)
+#Uruguay <- Zones %>% group_by(Uruguay) %>% summarise(CantidadEstados <- n())
+#Uruguay <- Zones %>% st_cast(to="POLYGON")
+```
+
 
 #Points in Polygons
+
+```{r}
+Test <- st_join(Accidents,Zones)
+```
+
+```{r}
+st_crs(Accidents) == st_crs(Zones) 
+Zones <- Zones %>% st_set_crs(32721)
+st_crs(Accidents) == st_crs(Zones) 
+```
+
+```{r}
+Test <- st_join(Accidents,Zones)
+```
 
 
 #A better map
