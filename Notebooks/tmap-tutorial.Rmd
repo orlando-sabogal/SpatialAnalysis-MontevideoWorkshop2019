@@ -1,0 +1,10 @@
+---
+title: "R Notebook"
+author: "Orlando Sabogal"
+output: 
+  html_notebook: 
+    number_sections: yes
+    toc: yes
+---
+
+tmap is a fantastic library!

@@ -1,0 +1,1 @@
+http://geoservicios.mtop.gub.uy:80/geoserver/inf_tte_ttelog_ferroviario/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=inf_tte_ttelog_ferroviario:afe_estaciones&outputFormat=SHAPE-ZIP

@@ -53,6 +53,15 @@ Introduce myself
 #Data wrangling
 
 ---
+#Programming 
+
+- Programming? Writting code? or just *scripting*?
+- Always use google. Even the most experimented programmers are all day in stackoverflow or github figuring out how to make things work. 
+- 
+
+
+
+---
 #Content 
 
 This course is about using data with geographic properties. 
@@ -103,6 +112,18 @@ class: inverse, center, middle
 
 # sf: simple features
 
+---
+#Reading and writing files. 
+
+```{r}
+
+```
+
+---
+#Spatial Operations
+
+- It works as a tibble with and additional *geometry* variable.
+- 
 
 ---
 #CRS: Coordinate Reference System

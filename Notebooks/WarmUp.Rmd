@@ -1,5 +1,6 @@
 ---
 title: "Warm Up"
+author: "Orlando Sabogal"
 output: 
   html_notebook: 
     number_sections: yes
@@ -30,7 +31,7 @@ getwd()
 
 #Points (Accidents)
 
-The most common type for spatial datasets are ESRI shape files. You can use the *st_read()* function and set the *dsn* argument (data source name).
+The most common type for spatial datasets are ESRI shape files. You can use the *st_read()* function and set the *dsn* (data source name) argument. Conversely, to write an spatial object the *st_write()* function is defined. 
 
 ```{r}
 
@@ -39,7 +40,7 @@ Accidents <- st_read("accidentes2006-2010.shp")
 
 ```
 
-The above function created the object *Accidents*. As usual, you can print the object in your console (or rmarkdown document) by typing the name of the object or get a general overview with **str()** and **summary()** . An easy way to make a map is by passing the *sf* object to the **plot()** function.
+The above function created the object *Accidents*. As usual, you can print the object in your console (or rmarkdown document) by typing the name of the object or get a general overview with the **str()** and **summary()** functions. An easy way to make a map is by passing the *sf* object to the **plot()** function.
 
 ```{r}
 Accidents
@@ -70,17 +71,23 @@ plot(st_geometry(Accidents))
 plot(st_geometry(Accidents), cex = 0.05, col = "blue")
 ```
 
-You can add some settings to the maps. Nevetheless, I personally prefer to use *tmap*. 
+You can add some settings to the maps. Nevetheless, I personally prefer to use **tmap**. 
 
 
-##Projections
+#Projections (CRS)
 
-What is the projection of this object?
+Planet earth is not a flat surface and is not perfectly round. Nevertheless, when you make maps you have to put a certain geographic area in two dimensions. This gets even more complicated if  you consider mountains and different sea levels. <br/>
+
+Projections are the way we transform the shape of the earth (or an area) to only two dimensions. There are many projections and all have some level of distortion. You can see the [section 2.4](https://geocompr.robinlovelace.net/spatial-class.html#crs-intro) from the **Geocomputation With R** book for a clear introduction to the topic. So far, you have to know that every **sf** object has a Coordinate Referense System (CRS) that can be configured using **EPSG** codes. There are **geographic** projections where the notion of distance is not related to a regular understanding of distance (it is not in meter or icnhes). In **Projected** projections on the other hand, the distance is in metes. Therefore, when you are performing operations sucha as calulations buffers or measuring distances it makes sense to put you CRS as a projected projection.  <br/>
+
+
+What is the projection of our *Accidents* object?
 
 ```{r}
 st_crs(Accidents)
 ```
 
+It does not have a defined CRS. You can do that with the **st_set_crs()** function. 
 
 ```{r}
 #st_set_crs
@@ -94,7 +101,11 @@ Accidents = st_set_crs(Accidents, 32721)
 st_crs(Accidents)
 ```
 
+Another usefl function when working with CRS is **st_transform** than enables to transform the coordinates of an object to other CRS, and switch among projected and geographic references. Be careful of using **st_set_crs** instead of **st_transform** when reprojecting and object. 
+
 ##Tidyverse in action
+
+One of the nicest feautures of **sf** is that is integrated to the [Tidyverse](https://www.tidyverse.org/), meaning that you can use the [%>% operation](https://www.rdocumentation.org/packages/magrittr/versions/1.5/topics/%25%3E%25) and chain your workflow calling [dplyr](https://dplyr.tidyverse.org/) functions such as **filter()**, **slice()** or **summarize()**. An **sf** object is basically a [tibble](https://tibble.tidyverse.org/) with an additional column for the geometry. 
 
 ```{r}
 Accidents %>% names()
@@ -160,29 +171,31 @@ Graves2006o2009 <- Accidents %>% filter(ANIO %in% c("2006","2009"))
 
 #Polygons (States)
 
+With the **st_read()* function is possible to read any kind o vectorial file. 
+
 ```{r}
 setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Vectoriales_2011")
-Zones <- st_read("ine_depto.shp")
+Uruguay <- st_read("ine_depto.shp")
 ```
 
 ```{r}
-plot(st_geometry(Zones))
+plot(st_geometry(Uruguay))
 ```
 
 
 ```{r}
-Montevideo <- Zones[Zones$NOMBRE == "MONTEVIDEO",]
+Montevideo <- Uruguay[Uruguay$NOMBRE == "MONTEVIDEO",]
 plot(st_geometry(Montevideo))
 ```
 
 ```{r}
-Montevideo <- Zones %>% filter(NOMBRE == "MONTEVIDEO")
+Montevideo <- Uruguay %>% filter(NOMBRE == "MONTEVIDEO")
 plot(st_geometry(Montevideo))
 ```
 
 ```{r}
 st_crs(Montevideo)
-st_crs(Zones)
+st_crs(Uruguay)
 
 st_crs(Montevideo) == st_crs(Accidents)
 ```
@@ -200,65 +213,331 @@ plot(st_geometry(Accidents), add = TRUE)
 ##The Tidyverse again
 
 ```{r}
-Zones %>% select(AREA_KM2_) %>% summary()
+Uruguay %>% select(AREA_KM2_) %>% summary()
 ```
 
 ```{r}
-Zones %>% 
+Uruguay %>% 
   ggplot(aes(x=AREA_KM2_)) +
     geom_histogram(breaks=seq(0,15000,1000))
 ```
 
 ```{r}
-BiggesStates <- Zones %>% filter(AREA_KM2_ > 13000)
+BiggesStates <- Uruguay %>% filter(AREA_KM2_ > 13000)
+BiggesStates
 ```
 
-```{r}
-#Zones <- Zones %>% mutate(Uruguay = 1)
-#Uruguay <- Zones %>% group_by(Uruguay) %>% summarise(CantidadEstados <- n())
-#Uruguay <- Zones %>% st_cast(to="POLYGON")
-```
 
 
 #Points in Polygons
 
+A simple operation might be to know how many point of an object fall in an area. Let's use the *stations* of the railway system in Urugay and see how many stations are in each state. This kind of procedures are called spatial operations. 
+
 ```{r}
-Test <- st_join(Accidents,Zones)
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/afe_estaciones")
+
+Stations <- st_read("afe_estaciones.shp")
+st_crs(Stations)
+```
+
+
+Before perfoming any spatial operation is better to ensure that the objects are in the same CRS.
+
+```{r}
+st_crs(Stations) == st_crs(Uruguay)
 ```
 
 ```{r}
-st_crs(Accidents) == st_crs(Zones) 
-Zones <- Zones %>% st_set_crs(32721)
-st_crs(Accidents) == st_crs(Zones) 
+Stations <- st_transform(Stations, 32721)
+Uruguay <- st_set_crs(Uruguay, 32721)
+st_crs(Stations) == st_crs(Uruguay)
 ```
 
 ```{r}
-Test <- st_join(Accidents,Zones)
+plot(st_geometry(Uruguay))
+plot(st_geometry(Stations), col = "green",add = T)
+```
+
+```{r}
+StationsInStates <- st_join(Stations, Uruguay)
+```
+
+```{r}
+dim(Stations)
+dim(Uruguay)
+dim(StationsInStates)
+```
+
+```{r}
+names(Stations)
+names(Uruguay)
+names(StationsInStates)
+```
+
+The *st_join()* funtion performed an operation that retrieved, for every point, the corresponding polygon and attached all data from that polygon. So, to get a polygons object with the amount of points wihtin each state we have to aggregate points by states createing a *tibble* and join it to the polygons file. 
+
+```{r}
+StatesPoints <- StationsInStates %>% group_by(NOMBRE) %>%
+  summarise(Stations = n()) %>% 
+  st_set_geometry(NULL)
+
+UruguayStations <- Uruguay %>% left_join(StatesPoints)
+```
+
+```{r}
+plot(UruguayStations[,6])
 ```
 
 
 #A better map
 
-
-
-#Rethinking Points
-
-
-
-
-Vamos a hacer algunos mapas bonitos. 
-Creat an animation using 
-
-```{r}
-setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/montevideourbano_shp")
-
-MontevideoUrbano <- st_read("MontevideoUrbano.shp")
-```
-
+So far we have been using the **plot()** function to create maps. **plot()** makes the homework but 
 
 ```{r}
 
 ```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+#Spatial Operations
+
+##Joining polygons by subsetting
+
+```{r}
+Colonia <- Uruguay %>% filter(NOMBRE == "COLONIA")
+Maldonado <- Uruguay %>% filter(NOMBRE == "MALDONADO")
+```
+
+```{r}
+plot(st_geometry(Colonia))
+plot(st_geometry(Maldonado))
+```
+
+```{r}
+Union <- rbind(Maldonado, Colonia)
+plot(st_geometry(Union))
+```
+
+
+```{r}
+Union <- rbind(Maldonado, Colonia, Montevideo)
+plot(st_geometry(Union))
+```
+
+```{r}
+Montevideo <- Montevideo %>% select(-AREA_KM2_, -NOMBRE)
+#Union <- rbind(Maldonado, Colonia, Montevideo) should return an error now. 
+
+Union <- rbind(Maldonado, Colonia)
+Union[3,] <- c(rep(0,5),Montevideo[1,4]) #It should be a more elegant way.
+
+plot(st_geometry(Union))
+```
+
+
+##Union (dissolve)
+
+```{r}
+#?nc
+nc = st_read(system.file("shape/nc.shp", package="sf"))
+plot(st_geometry(nc))
+plot(st_union(nc))
+
+```
+
+
+```{r}
+nc <- nc %>% mutate(State = "NorthCarolina")
+OtherWay <- nc %>%  group_by("NorthCarolina") %>% summarise(Total = n())
+plot(st_geometry(OtherWay))
+```
+
+##Buffers
+
+```{r}
+Point1 <- Accidents %>% slice(123)
+Point2 <- Accidents %>% slice(321)
+
+#see: https://epsg.io/5383
+#https://epsg.io/?q=Uruguay%20kind%3APROJCRS
+#Or should we use 54032 ?
+
+Point1 <- st_transform(Point1, 5383)
+Point2 <- st_transform(Point2, 5383)
+
+st_is_longlat(Point1)
+st_is_longlat(Point2)
+```
+
+```{r}
+Buffer1 <- st_buffer(Point1, 500)  #The units are un meters
+Buffer2 <- st_buffer(Point2, 500)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(Buffer1 %>% st_transform(32721)), add = TRUE)
+plot(st_geometry(Buffer2 %>% st_transform(32721)), add = TRUE)
+```
+
+
+```{r}
+Buffers <- rbind(Buffer1, Buffer2)
+Buffers <- st_transform(Buffers, 32721)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(Buffers), add = TRUE)
+```
+
+
+```{r}
+Points <- Accidents %>% slice(1,2,3,123,321) %>% transform(5383)
+BufferPoints <- Points %>% st_buffer(1500) %>% st_transform(32721)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(BufferPoints), col = "gold4",add = TRUE)
+plot(st_geometry(Points %>% st_transform(32721)), col = "red", add = TRUE)
+
+```
+
+
+
+##Intersecions
+
+```{r}
+Point1 <- Accidents %>% slice(123)
+Point2 <- Accidents %>% slice(321)
+
+Point1 <- st_transform(Point1, 5383)
+Point2 <- st_transform(Point2, 5383)
+
+Polygon1 <- st_buffer(Point1,6000) %>% st_transform(32721)
+Polygon2 <- st_buffer(Point2,6000) %>% st_transform(32721)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(Polygon1), add = TRUE)
+plot(st_geometry(Polygon2), add = TRUE)
+```
+
+
+```{r}
+MyIntersection <- st_intersection(Polygon1,Polygon2)
+#Try st_intersects(Polygon1, Polygon2)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(MyIntersection), col = "darkgreen", border = "darkgreen",add = TRUE)
+```
+
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(Polygon1), add = TRUE)
+plot(st_geometry(Polygon2), add = TRUE)
+plot(st_geometry(MyIntersection), col = "darkgreen", border = "darkgreen",add = TRUE)
+```
+
+
+##Differnce
+
+
+```{r}
+MyDifference1 <- st_difference(Polygon1, Polygon2)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(MyDifference1), col = "darkgreen", border = "darkgreen",add = TRUE)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(Polygon1), add = TRUE)
+plot(st_geometry(Polygon2), add = TRUE)
+plot(st_geometry(MyDifference1), col = "darkgreen", border = "darkgreen",add = TRUE)
+```
+
+
+```{r}
+MyDifference2 <- st_difference(Polygon2, Polygon1)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(MyDifference2), col = "darkgreen", border = "darkgreen",add = TRUE)
+```
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(Polygon1), add = TRUE)
+plot(st_geometry(Polygon2), add = TRUE)
+plot(st_geometry(MyDifference2), col = "darkgreen", border = "darkgreen",add = TRUE)
+```
+
+```{r}
+MyTwoDiffereces <- rbind(MyDifference1, MyDifference2)
+```
+
+
+```{r}
+plot(st_geometry(Montevideo), col = "deepskyblue1")
+plot(st_geometry(Polygon1), add = TRUE)
+plot(st_geometry(Polygon2), add = TRUE)
+plot(st_geometry(MyTwoDiffereces), col = "darkgreen", border = "darkgreen",add = TRUE)
+```
+
+
+##Areas
+
+```{r}
+st_area(Polygon1)
+st_area(Polygon2)
+```
+
+```{r}
+Uruguay <- Uruguay %>% mutate(Areas = st_area(Uruguay)) %>% mutate(Areas = as.numeric(Areas))
+```
+
+##Ceontroids
+
+```{r}
+MyCentroid <- st_centroid(Polygon1)
+MyCentroid
+```
+
+```{r}
+plot(st_geometry(Polygon1), col = "black")
+plot(st_geometry(MyCentroid), col = "red", pch = 3, cex = 4, add = TRUE)
+```
+
+
+```{r}
+UruguayCentroids <- Uruguay %>% st_centroid()
+```
+
+```{r}
+plot(st_geometry(Uruguay), col = "deepskyblue1")
+plot(st_geometry(UruguayCentroids), pch = 3, col = "red", add = TRUE)
+```
+
+##Other Spatial Operations
+
+
+If you want to see the full capabilities provided by *sf* you can check this [cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/sf.pdf) or the [package vignettes](https://r-spatial.github.io/sf/articles/sf1.html)
 
 <br/>
 
@@ -270,8 +549,10 @@ All data used in this workflow was downloaded from **Open Source** [pltaforms](h
 - Data in */Vectoriales_2011* were retrieved from [Instituto nacional de estadística](http://ine.gub.uy/mapas-vectoriales) 
 - Data in */Accidentes2006-2010* were taken from [Catálogo de datos abiertos]((https://catalogodatos.gub.uy/dataset/accidentes-de-transito-montevideo)
 - Data in */CyclingMontevideoData* were taken from [Catálogo de datos abiertos](https://catalogodatos.gub.uy/dataset/bicicircuitos-bicicletarios-estaciones-y-talleres-de-reparacion)
-Another interesting sources are:
+- Data in*/afe_estaciones* were taken from the [Geoportal](http://geoportal.mtop.gub.uy/geoservicios)
 
-- [geoportal](http://geoportal.mtop.gub.uy/geoservicios)
+
+Another interesting soure in Uruguay is:
+
 - [La Encuesta continua de hogares](http://www.ine.gub.uy/web/guest/encuesta-continua-de-hogares1)
 
