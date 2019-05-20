@@ -13,10 +13,56 @@ library(sf)
 library(leaflet)
 ```
 
+Originallyl, Leaflet is a javascript [library](https://leafletjs.com/). If yoy know your way around **js** it goes something like this: 
+
+```{r,eval=FALSE}
+##This is javascript code, DO NOT RUN!
+
+var map = L.map('map').setView([51.505, -0.09], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+L.marker([51.5, -0.09]).addTo(map)
+    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+    .openPopup();
+```
+
+You should also know to configure a CCS file in the header section of your html file and include Leaflet: 
+
+```{r, eval=FALSE}
+##This is html code, DO NOT RUN!
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+
+     
+ ##<!-- Make sure you put this AFTER Leaflet's CSS -->
+ 
+     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+   crossorigin=""> </script>
+
+```
+
+Fortunately, in the [html widgets for R](http://www.htmlwidgets.org/) there is a [Leaflet for R](https://rstudio.github.io/leaflet/) that let you use most of the capabilities of Leaflet with your regular R code. To create maps with leaflet you can use *data.frame* objects, *sf* objects, *raster* objects and *json* files. 
+
+Leaflet for R is methodologically easy to use and you can get farther by exploring the arguments of the functions. A nice feature of Leaflet is that is integrated with shiny. 
+
+#Rudiments
+
+To a create a leaflet object you only have to call the **leaflet()** function. If you have an object (think about an *sf*) which you want to plot you should pass it through the function as **leaflet(YourObject)**. To add layers the **%>%** is used before a new function defining a new characteristic of the map. 
+As a backgroung layer leaflet enables to use different maps providers with **addProviderTiles.**
+
 ```{r}
 leaflet() %>% 
   addProviderTiles(providers$Esri.NatGeoWorldMap)
 ```
+
+You can see the Tiles options [here](http://leaflet-extras.github.io/leaflet-providers/preview/). 
+In the previous map you can zoom in and zoom out all aorund the world. You can set the specific view you want with the **setView()** function as in the following examples where the maps are centered in *Plaza de la indepencia* (Montevideo, Uruguay)
 
 ```{r}
 leaflet() %>% 
@@ -31,6 +77,10 @@ leaflet() %>%
   setView(lng = -56.199735, lat = -34.906543, zoom = 16)
 ```
 
+
+
+Of course, tha main benefit of using leaflet is getting your own data into the map. You can add a marker with **addMarkers** an specifying the long and lat coordinates. 
+
 ```{r}
 leaflet() %>% 
   addProviderTiles(providers$CartoDB.Positron) %>%
@@ -38,12 +88,16 @@ leaflet() %>%
   addMarkers(-56.199735, -34.906543)
 ```
 
+An you can even assign a popup.
+
 ```{r}
 leaflet() %>% 
   addProviderTiles(providers$CartoDB.Positron) %>%
   setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
   addMarkers(-56.199735, -34.906543, popup = "Plaza Independencia")
 ```
+
+An add many more markers.
 
 ```{r}
 leaflet() %>% 
@@ -53,6 +107,8 @@ leaflet() %>%
   addMarkers(-56.198309, -34.906563, popup = "Palacio Salvo")
 ```
 
+
+It does not make sense to add geographic information one by one; rather, a better option is give to the function an object and atomatically plot all the markers.
 
 ```{r}
 Sites <- data.frame(longitud = c(-56.199735, -56.198309, -56.201037), 
@@ -65,6 +121,8 @@ leaflet(Sites) %>%
   addMarkers(lng = ~longitud, lat = ~lattitud, popup = ~Name)
 ```
 
+In the last example we configured our data in the **leaflet()** function, but is also possible to do it in the **addMarkers()** function.
+
 ```{r}
 leaflet() %>% 
   addProviderTiles(providers$CartoDB.Positron) %>%
@@ -72,6 +130,8 @@ leaflet() %>%
   addMarkers(data = Sites, lng = ~longitud, lat = ~lattitud, popup = ~Name)
 ```
 
+
+A marker can also be a circle:
 
 ```{r}
 leaflet() %>% 
@@ -81,6 +141,8 @@ leaflet() %>%
 ```
 
 
+But is time to plot more natural "geometric-vectorial" elements as a circle (**addCircles()**)
+
 ```{r}
 leaflet() %>% 
   addProviderTiles(providers$CartoDB.Positron) %>%
@@ -88,6 +150,12 @@ leaflet() %>%
   addCircles(data = Sites, lng = ~longitud, lat = ~lattitud,
                    radius = 100)
 ```
+
+
+What is the difference among **addCircleMarker()** and **addCircle().**
+
+
+#Points
 
 
 ```{r}
@@ -124,15 +192,125 @@ Accidents <- st_read("accidentes2006-2010.shp")
 ```{r}
 Uruguay = st_set_crs(Uruguay, 32721)
 Accidents = st_set_crs(Accidents, 32721)
+
+Uruguay <- st_transform(Uruguay,4326)
+Accidents = st_transform(Accidents, 4326)
 ```
 
 ```{r}
+leaflet(Uruguay) %>% 
+  addPolygons()
+```
 
+
+```{r}
+leaflet(Uruguay) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addPolygons()
 ```
 
 ```{r}
+leaflet(Uruguay) %>% 
+  addProviderTiles(providers$Stamen.Watercolor) %>% 
+  addPolygons()
+```
+
+
+```{r}
+leaflet(Uruguay) %>% 
+  addProviderTiles(providers$Stamen.Watercolor) %>% 
+  addPolygons(color = "black", weight = 2, fillColor = "white")
+```
+
+
+```{r}
+leaflet(Uruguay) %>% 
+  addProviderTiles(providers$Stamen.Watercolor) %>% 
+  addPolygons(color = "black", weight = 2, fillColor = "white", fillOpacity = 1,
+              highlightOptions = highlightOptions(color = "blue", fillColor = "blue", 
+                                                  weight = 0, bringToFront = TRUE))
+```
+
+```{r}
+leaflet(Uruguay) %>% 
+  addProviderTiles(providers$Stamen.Watercolor) %>% 
+  addPolygons(color = "black", weight = 2, fillColor = "white", fillOpacity = 1,
+              label = ~NOMBRE, labelOptions = labelOptions(
+                style = list("font-weight" = "normal"), 
+                textsize = "10px"),
+              highlightOptions = highlightOptions(color = "blue", fillColor = "blue", 
+                                                  weight = 0, bringToFront = TRUE))
+```
+
+
+Once you get used to leaflet you realize that is easy to create awosome maps. You may struggle a little bit with the inside function-arguments and probably will iterate a few times, but you will get it done. 
+
+```{r}
+#source: https://rstudio.github.io/leaflet/choropleths.html &
+# From http://leafletjs.com/examples/choropleth/us-states.js
+
+#install.packages("geojsonio")
+
+#states <- geojsonio::geojson_read("json/us-states.geojson", what = "sp")
+#see: https://github.com/rstudio/leaflet/issues/498
+
+states <- geojsonio::geojson_read( 
+        x = "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json"
+        , what = "sp"
+    )
+
+
+bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf)
+pal <- colorBin("YlOrRd", domain = states$density, bins = bins)
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+  states$name, states$density
+) %>% lapply(htmltools::HTML)
+
+leaflet(states) %>%
+  setView(-96, 37.8, 4) %>%
+  addProviderTiles("MapBox", options = providerTileOptions(
+    id = "mapbox.light",
+    accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+  addPolygons(
+    fillColor = ~pal(density),
+    weight = 2,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlight = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+    label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto")) %>%
+  addLegend(pal = pal, values = ~density, opacity = 0.7, title = NULL,
+    position = "bottomright")
+
 
 ```
+
+
+
+#Points
+
+```{r}
+Accidents2009 <- Accidents %>% filter(ANIO == "2009")
+leaflet(Accidents2009) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addCircles()
+```
+
+
+
+#Go Shiny!
 
 ```{r}
 
