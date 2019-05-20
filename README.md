@@ -1,7 +1,7 @@
 
 ## Montevideo (Uruguay) - June 2019.
 
-This is short course about using geographic data to generate maps and insights. We will see how to use the  **sf** library to load and process data by performing spatial operations. For map-making we are going to introduce the **tmap** library. Also, we will see how to create interactive maps with **leaflet.** <br/>
+This is a short course about using geographic data to generate maps and insights. We will see how to use the  **sf** library to load and process data by performing spatial operations. For map-making we are going to introduce the **tmap** library. Also, we will see how to create interactive maps with **leaflet.** <br/>
 
 [Here](Presentations/spatial-analysis-presentation.html) you can find the slides to the introduction. <br/>
 

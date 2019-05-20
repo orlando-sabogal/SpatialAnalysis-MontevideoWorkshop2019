@@ -294,16 +294,15 @@ plot(UruguayStations[,6])
 So far we have been using the **plot()** function to create maps. **plot()** makes the homework but it feels quite limited. I prefer the **tmap** library and later on the workshop we'll cover a brief [tmap Tutorial](https://orlando-sabogal.github.io/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/tmap-tutorial.nb.html). For now, I just want you know that you have the possibility to create atonishing and beautiful maps. But pior to that, there is always a bunch of data processing and wragling that we can do with the help os **sf** and **tidyverse.**
 
 ```{r}
-
+tm_shape(UruguayStations) + 
+  tm_polygons(col = "Stations",  lwd = 3, border.col = "black") +
+  tm_compass(type = "8star", position = c(0.85, 0.04),size=3) +
+  tm_scale_bar(position = c(0.06,0))+
+  tm_layout(legend.position = c(0.8,0.7),
+            legend.title.size = 1,
+            legend.frame = T)
 ```
 
-```{r}
-
-```
-
-```{r}
-
-```
 
 
 #Spatial Operations
@@ -452,7 +451,7 @@ plot(st_geometry(MyIntersection), col = "darkgreen", border = "darkgreen",add = 
 ```
 
 
-##Differnce
+##Difference
 
 
 ```{r}
@@ -547,7 +546,7 @@ All data used in this workflow was downloaded from **Open Source** [pltaforms](h
 
 - Data in */montevideorural_shp* and */montevideourbano_shp* were retrieved from the Uruguay [Cátalogo dde datos abiertos](https://catalogodatos.gub.uy/dataset/shapes-del-parcelario-rural-y-urbano).
 - Data in */Vectoriales_2011* were retrieved from [Instituto nacional de estadística](http://ine.gub.uy/mapas-vectoriales) 
-- Data in */Accidentes2006-2010* were taken from [Catálogo de datos abiertos]((https://catalogodatos.gub.uy/dataset/accidentes-de-transito-montevideo)
+- Data in */Accidentes2006-2010* were taken from [Catálogo de datos abiertos](https://catalogodatos.gub.uy/dataset/accidentes-de-transito-montevideo)
 - Data in */CyclingMontevideoData* were taken from [Catálogo de datos abiertos](https://catalogodatos.gub.uy/dataset/bicicircuitos-bicicletarios-estaciones-y-talleres-de-reparacion)
 - Data in*/afe_estaciones* were taken from the [Geoportal](http://geoportal.mtop.gub.uy/geoservicios)
 
