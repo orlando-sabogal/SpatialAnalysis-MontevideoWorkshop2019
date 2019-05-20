@@ -13,3 +13,132 @@ library(sf)
 library(leaflet)
 ```
 
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 8)
+
+```
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16)
+```
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addMarkers(-56.199735, -34.906543)
+```
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addMarkers(-56.199735, -34.906543, popup = "Plaza Independencia")
+```
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addMarkers(-56.199735, -34.906543, popup = "Plaza Independencia") %>% 
+  addMarkers(-56.198309, -34.906563, popup = "Palacio Salvo")
+```
+
+
+```{r}
+Sites <- data.frame(longitud = c(-56.199735, -56.198309, -56.201037), 
+                    lattitud = c(-34.906543, -34.906563, -34.907896), 
+                    Name = c("Plaza Independencia", "Palacio Salvo", "Teatro Solis"))
+
+leaflet(Sites) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addMarkers(lng = ~longitud, lat = ~lattitud, popup = ~Name)
+```
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addMarkers(data = Sites, lng = ~longitud, lat = ~lattitud, popup = ~Name)
+```
+
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addCircleMarkers(data = Sites, lng = ~longitud, lat = ~lattitud)
+```
+
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addCircles(data = Sites, lng = ~longitud, lat = ~lattitud,
+                   radius = 100)
+```
+
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addCircles(data = Sites, lng = ~longitud, lat = ~lattitud,
+                   radius = 100, opacity = 1, fillOpacity = 1)
+```
+
+
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
+  addCircles(data = Sites, lng = ~longitud, lat = ~lattitud,
+                   radius = 100, opacity = 1, fillOpacity = 0.7, color = "black", fillColor = "green")
+```
+
+
+
+#Using our shapes
+
+```{r}
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Vectoriales_2011")
+Uruguay <- st_read("ine_depto.shp")
+```
+
+```{r}
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Accidentes2006-2010")
+Accidents <- st_read("accidentes2006-2010.shp")
+```
+
+```{r}
+Uruguay = st_set_crs(Uruguay, 32721)
+Accidents = st_set_crs(Accidents, 32721)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
