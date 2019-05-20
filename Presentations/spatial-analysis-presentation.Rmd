@@ -199,6 +199,7 @@ There are many **free** and **open** resources that you can use:
 - [Spation-Temporal Statistics With R](https://spacetimewithr.org/)
 - [Spatial Data Science](https://keen-swartz-3146c4.netlify.com/)
 - [Predictive Soil Mapping With R](https://soilmapper.org/)
+- [Spatial Data Science](https://rspatial.org/index.html)
 - [Intro to Gis and Spatial Analysis](https://mgimond.github.io/Spatial/index.html)
 - [Workshop on R and Movement Ecology](https://www.danaseidel.com/MovEco-R-Workshop/)
 - [Geoinformatics with R](http://rgeo.tbuckl.com/)

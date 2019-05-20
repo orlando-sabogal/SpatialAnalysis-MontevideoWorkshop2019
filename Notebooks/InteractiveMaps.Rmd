@@ -7,4 +7,9 @@ output:
     toc: yes
 ---
 
-Leaflet!
+```{r}
+library(tidyverse)
+library(sf)
+library(leaflet)
+```
+
