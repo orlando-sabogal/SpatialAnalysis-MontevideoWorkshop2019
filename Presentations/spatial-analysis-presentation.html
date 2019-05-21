@@ -37,6 +37,8 @@ Introduce myself
 
 #Spatial data is special
 
+###ADD SOME GENERAL INTRO &lt;br/&gt;
+###PROVIDE CONTEXT
 
 ---
 class: inverse, center, middle
@@ -71,22 +73,35 @@ Source: https://www.r-graph-gallery.com/270-james-cheshire-dataart/
 ---
 #Statistical models
 
+&lt;br/&gt;
+
+--
 - Areal data: Observed variable on zones follows a random process. Spatial Autucorrelation. Modifable areal unit problem MAUP.
 
-- Point data:Location as a random process (crimes). Differnce between spatial distribution and completely random spatial distribution. Usually associated with hotspots and Kernel Denstiy Estimation KDE. 
 
-- Continous data: *Geostatistics.* The variables is continously distributed across all the territory but there are limited discrete-fixed observations. Semivariogram, interpolation, Kriging. 
+--
+- Point data:Location as a random process (crimes). Differnce between spatial distribution and completely random spatial distribution. Usually associated with hotspots and Kernel Denstiy Estimation KDE.
+
+
+--
+- Continous data: *Geostatistics.* The variables is continously distributed across all the territory but there are limited discrete-fixed observations. Semivariogram, interpolation, Kriging.
 
 
 ---
 #Programming 
 
 - Programming? Writting code? or just *scripting*?
+
 - Always use google. Even the most experimented programmers are all day in stackoverflow or github figuring out how to make things work. 
+
 - I see programming as a superpower. 
+
 - It can certainly foster your work. 
+
 - Reproducible research, government accountability, citizen science. 
+
 - **Empowerment**
+
 - R is a (powerful) tool. Be aware of other tools: *python*, *javascript*, *SQL.*
 
 
@@ -147,31 +162,61 @@ class: inverse, center, middle
 # sf: simple features
 
 ---
-#Reading and writing files. 
-
-
-
----
 #Spatial Operations
 
-- It works as a tibble with and additional *geometry* variable.
-- 
-
----
-#CRS: Coordinate Reference System
-
-Can be:
-- *geographic* (distance is not in meters)
-- *projected* (distance is in meters) 
-
-Options:
+--
+- Read and Write Data
 
 
 ```r
+st_read()
+st_write()
+```
+
+--
+- It works as a tibble with and additional *geometry* variable. You can use almost the whole **Tidyverse**
+
+
+```r
+SF_Object %&gt;% ...functions()...
+
+filter()
+arrange()
+group_by()
+summarise()
+...
+```
+
+
+---
+###Some Useful Functions
+
+
+```r
+plot(st_geometry())
+st_join()
+st_union()
+st_difference()
+st_buffer()
+...
+```
+
+--
+###CRS: Coordinate Reference System
+- *geographic* (distance is not in meters)
+- *projected* (distance is in meters) 
+
+--
+
+```r
+st_crs()
+st_is_longlat()
+
 st_set_crs()
 st_transform()
 ```
-
+--
+Go to the [sf Tutorial!](https://orlando-sabogal.github.io/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/WarmUp.nb.html)
 
 ---
 class: inverse, center, middle
@@ -179,6 +224,29 @@ class: inverse, center, middle
 #tmap
 ##(I love it)
 
+
+---
+#A grammar for plots
+
+**tmap** works in a similar way to **ggplot2**. &lt;br/&gt;
+Is simple to use. Think about having an empty canvas where you add elements by using **+ tm_SomeFuncion.**
+
+
+```r
+tm_shape() + tm_polygons() +
+  tm_shape() + tm_dots() + 
+  tm_compass() + tm_scale_bar()
+```
+
+###Some capabilities:
+- Auxiliar maps (insets)
+- Interactiviy, connection to Leaflet
+- Full customization of legends
+- Faceted maps
+
+--
+
+Go to the [tmap Tutorial!](https://orlando-sabogal.github.io/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/tmap-tutorial.nb.html)
 
 ---
 class: inverse, center, middle
@@ -216,10 +284,20 @@ leaflet() %&gt;% addProviderTiles() %&gt;%
 - [SpatialEpiApp](https://paulamoraga.shinyapps.io/spatialepiapp/)
 - Is actually an [R package](https://paula-moraga.github.io/blog/2018/01/04/2018-01-04_spatialepiapp/) too. 
 
+&lt;br/&gt;
+--
+Go to the [leaflet Tutorial!](https://orlando-sabogal.github.io/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/InteractiveMaps.nb.html)
+
 ---
+class: inverse, center, middle
+
 #The sky is the limit!
 
-There are many **free** and **open** resources that you can use:
+---
+
+&lt;br/&gt;
+
+###There are many **free** and **open** resources that you can use:
 
 - [Geocomputation with R](https://geocompr.robinlovelace.net/) 
 - [Spation-Temporal Statistics With R](https://spacetimewithr.org/)

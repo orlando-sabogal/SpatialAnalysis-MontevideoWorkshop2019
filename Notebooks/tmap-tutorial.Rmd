@@ -13,6 +13,9 @@ library(sf)
 library(tmap)
 ```
 
+
+#Rudiments
+
 ```{r}
 setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Accidentes2006-2010")
 Accidents <- st_read("accidentes2006-2010.shp")
@@ -47,6 +50,33 @@ tm_shape(Montevideo) +
   tm_shape(Accidents) + tm_bubbles()
 ```
 
+```{r}
+MyMap <- tm_shape(Uruguay) + 
+  tm_polygons(col = "deepskyblue1") 
+```
+
+```{r}
+MyMap
+```
+
+
+```{r}
+st_bbox(Uruguay)
+st_bbox(Montevideo)
+```
+
+
+```{r}
+tm_shape(Uruguay, bbox = st_bbox(Montevideo)) + 
+  tm_polygons(col = "deepskyblue1") 
+```
+
+
+```{r}
+
+```
+
+
 [Nort Carolina SIDS data](https://nowosad.github.io/spData/reference/nc.sids.html)
 
 ```{r}
@@ -57,10 +87,18 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 tm_shape(nc) + tm_polygons(col="BIR79")
 ```
 
+#The road to a map
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79")
+```
+
 ```{r}
 tm_shape(nc) + tm_polygons(col="BIR79") + 
   tm_compass() + tm_scale_bar()
 ```
+
+## Legends - tm_layout function
 
 ```{r}
 tm_shape(nc) + tm_polygons(col="BIR79") + 
@@ -93,6 +131,8 @@ tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") +
 ```
 
 
+##Where is the south?
+
 But coming back to our map, it needs a compass so your audience know where noth and east are.
 
 ```{r}
@@ -123,7 +163,7 @@ tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") +
 ```
 
 
-
+##The scale
 
 ```{r}
 tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
@@ -149,7 +189,7 @@ tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") +
 
 In the [documentation](https://www.rdocumentation.org/packages/tmap/versions/2.2/topics/tm_layout)
 In the [documentation](https://www.rdocumentation.org/packages/tmap/versions/2.2/topics/tm_compass)
-In the [documentation](https://www.rdocumentation.org/packages/tmap/versions/2.2/topics/tm_scale_bar
+In the [documentation](https://www.rdocumentation.org/packages/tmap/versions/2.2/topics/tm_scale_bar)
 
 ```{r}
 tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
@@ -183,6 +223,7 @@ MyMap <- tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") +
 MyMap
 ```
 
+##Mode: View
 
 ```{r}
 tmap_mode("view")
@@ -193,6 +234,16 @@ MyMap
 ```{r}
 tmap_mode("plot")
 ```
+
+
+```{r}
+UruguayMap <- tm_shape(Uruguay) + 
+  tm_polygons()
+
+tmap_leaflet(UruguayMap)
+```
+
+##Colors
 
 ```{r}
 tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = "Blues") + 
@@ -279,4 +330,100 @@ tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = My
     tm_compass(size = 5, type = "rose", lwd = 3) + 
     tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
                  lwd = 3)
+```
+
+
+#Auxiliar map
+
+```{r}
+MontevideoMap <- tm_shape(Montevideo) + 
+  tm_polygons() +
+  tm_shape(Accidents) + tm_bubbles()
+
+UruguayMap <- tm_shape(Uruguay) + 
+  tm_polygons()
+```
+
+```{r}
+library(grid)
+```
+
+
+```{r}
+MontevideoMap
+print(UruguayMap, vp = viewport(0.17, 0.8, width = 0.25, height = 0.25))
+```
+
+```{r}
+MontevideoMap <- tm_shape(Montevideo) + 
+  tm_polygons(col = "deepskyblue1") 
+
+
+MontevideoNeigh <- Uruguay %>% filter(NOMBRE %in% c("SAN JOSE", "CANELONES", "MONTEVIDEO"))
+
+AuxMap <- tm_shape(MontevideoNeigh) + tm_polygons(col = "green")
+```
+
+```{r}
+MontevideoMap
+print(AuxMap, vp = viewport(0.17, 0.8, width = 0.2, height = 0.2))
+```
+
+
+Our map needs some context!
+
+```{r}
+MontevideoBox <- st_bbox(Montevideo) %>% st_as_sfc() #Why not st_as_sf?
+```
+
+```{r}
+tm_shape(MontevideoBox) + tm_polygons(col = "white", border.col = "blue", lwd = 4)
+#plot(st_geometry(MontevideoBox))
+```
+
+
+```{r}
+
+AuxMap <- tm_shape(MontevideoNeigh) + tm_polygons(col = "green") + 
+  tm_shape(MontevideoBox) + tm_polygons(border.col = "red", lwd = 2.5, alpha = 0.3)
+  
+
+MontevideoMap
+print(AuxMap, vp = viewport(0.17, 0.8, width = 0.2, height = 0.2))
+```
+
+
+#Faceted maps
+
+```{r}
+tm_shape(Montevideo) + tm_polygons() +
+  tm_shape(Accidents) + tm_dots(alpha = 0.5) + tm_facets(by = "ANIO")
+```
+
+```{r}
+tm_shape(Montevideo) + tm_polygons() +
+  tm_shape(Accidents) + tm_dots(alpha = 0.5) + tm_facets(by = "ANIO", nrow = 1)
+```
+
+```{r}
+tm_shape(Montevideo) + tm_polygons() +
+  tm_shape(Accidents) + tm_dots(alpha = 0.5) + tm_facets(by = "ANIO", ncol = 1)
+```
+
+```{r}
+Accidents2006 <- Accidents %>% filter(ANIO == "2006")
+Accidents2010 <- Accidents %>% filter(ANIO == "2010")
+
+Complements <- tm_compass() + tm_scale_bar()
+
+Map2006 <- tm_shape(Accidents2006) + tm_dots() + Complements
+Map2010 <- tm_shape(Accidents2010) + tm_dots() + Complements
+```
+
+```{r}
+tmap_arrange(Map2006, Map2010)
+```
+
+```{r}
+
 ```
