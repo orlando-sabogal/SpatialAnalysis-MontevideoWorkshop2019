@@ -7,4 +7,276 @@ output:
     toc: yes
 ---
 
-tmap is a fantastic library!
+```{r}
+library(tidyverse)
+library(sf)
+library(tmap)
+```
+
+```{r}
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Accidentes2006-2010")
+Accidents <- st_read("accidentes2006-2010.shp")
+Accidents = st_set_crs(Accidents, 32721)
+
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/afe_estaciones")
+Stations <- st_read("afe_estaciones.shp")
+Stations <- st_set_crs(Stations, 32721)
+
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/Vectoriales_2011")
+Uruguay <- st_read("ine_depto.shp")
+Uruguay <- st_set_crs(Uruguay, 32721)
+
+setwd("~/Dropbox/Teaching/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/Montevideo_Data/CyclingMontevideoData/v_bi_bicicircuitos")
+Bicicircuitos <- st_read("v_bi_bicicircuitos.shp")
+
+```
+
+```{r}
+tm_shape(Uruguay) + 
+  tm_polygons()
+```
+
+```{r}
+Montevideo <- Uruguay %>% filter(NOMBRE=="MONTEVIDEO")
+```
+
+
+```{r}
+tm_shape(Montevideo) + 
+  tm_polygons() +
+  tm_shape(Accidents) + tm_bubbles()
+```
+
+[Nort Carolina SIDS data](https://nowosad.github.io/spData/reference/nc.sids.html)
+
+```{r}
+nc = st_read(system.file("shape/nc.shp", package="sf"))
+```
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79")
+```
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79") + 
+  tm_compass() + tm_scale_bar()
+```
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79") + 
+    tm_layout(legend.position = c(0.2,0.03),
+              scale=0.8,
+              legend.frame = T)
+```
+
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T)
+```
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(title = "THI IS MY TITLE",
+              legend.position = c(0.01,0.05),
+              scale = 0.9,
+              legend.frame = T) + 
+   tm_add_legend(type = c("fill"),
+                labels = c("Some Area","Other Area"), 
+                col = c("#66c2a5","#e5c494"),
+                title = "Other Areas") +
+  tm_add_legend(type = "symbol", 
+                labels = c("A point","Other Point"), 
+                col = c("#e78ac3","grey"))
+```
+
+
+But coming back to our map, it needs a compass so your audience know where noth and east are.
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T) + 
+    tm_compass() 
+  
+```
+
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T) + 
+    tm_compass(size = 5, type = "8star") 
+  
+```
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T) + 
+    tm_compass(size = 5, type = "rose", lwd = 3, show.labels = 0) 
+```
+
+
+
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T) + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar()
+```
+
+
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T) + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 2, position = c(0.06,0))
+```
+
+
+
+In the [documentation](https://www.rdocumentation.org/packages/tmap/versions/2.2/topics/tm_layout)
+In the [documentation](https://www.rdocumentation.org/packages/tmap/versions/2.2/topics/tm_compass)
+In the [documentation](https://www.rdocumentation.org/packages/tmap/versions/2.2/topics/tm_scale_bar
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T) + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
+                 lwd = 5, color.dark = "darkgreen", color.light = "blue")
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+MyMap <- tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T,
+              bg.color = "lightblue") + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
+                 lwd = 3)
+
+```
+
+```{r}
+MyMap
+```
+
+
+```{r}
+tmap_mode("view")
+MyMap
+```
+
+
+```{r}
+tmap_mode("plot")
+```
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = "Blues") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T,
+              bg.color = "lightblue") + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
+                 lwd = 3)
+
+```
+
+```{r}
+library(RColorBrewer)
+display.brewer.all()
+```
+
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = "YlGnBu") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T,
+              bg.color = "lightblue") + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
+                 lwd = 3)
+```
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = "-YlGnBu") + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T,
+              bg.color = "lightblue") + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
+                 lwd = 3)
+```
+
+
+```{r}
+summary(nc$BIR79)
+```
+
+
+```{r}
+nc %>% ggplot(aes(x=BIR79)) + geom_histogram()
+```
+
+
+
+```{r}
+Breaks <- c(0, 2000, 4000, 6000, 31000)
+Labels <- c("0 - 2000", "2000 - 4000", "4000 - 6000", ">6000")
+```
+
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = "YlGnBu",
+                           breaks = Breaks, labels = Labels) + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T,
+              bg.color = "lightblue") + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
+                 lwd = 3)
+```
+
+```{r}
+MyPalette <- c("#f2f0f7", "#cbc9e2", "#9e9ac8", "#6a51a3")
+```
+
+
+```{r}
+tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = MyPalette,
+                           breaks = Breaks, labels = Labels) + 
+    tm_layout(legend.position = c(0.01,0.65),
+              scale=0.65,
+              legend.frame = T,
+              bg.color = "lightblue") + 
+    tm_compass(size = 5, type = "rose", lwd = 3) + 
+    tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
+                 lwd = 3)
+```
