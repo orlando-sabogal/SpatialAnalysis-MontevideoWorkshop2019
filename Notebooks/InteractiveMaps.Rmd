@@ -119,6 +119,7 @@ leaflet(Sites) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   setView(lng = -56.199735, lat = -34.906543, zoom = 16) %>% 
   addMarkers(lng = ~longitud, lat = ~lattitud, popup = ~Name)
+
 ```
 
 In the last example we configured our data in the **leaflet()** function, but is also possible to do it in the **addMarkers()** function.
@@ -309,14 +310,4 @@ leaflet(Accidents2009) %>%
 ```
 
 
-
-#Go Shiny!
-
-```{r}
-
-```
-
-```{r}
-
-```
 

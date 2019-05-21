@@ -130,6 +130,9 @@ Hopefully, **we will code a lot.**
 #libraries
 
 --
+There are many libraries. In this course we are going to try to cover the basics apsects of: <br> </br>
+
+--
 sf  <br> </br>
 --
 sf + *The Tidyverse* <br> </br>
@@ -196,6 +199,27 @@ Originallyl, Leaflet is a javascript [library](https://leafletjs.com/) "...desig
 Fortunately, in the [html widgets for R](http://www.htmlwidgets.org/) there is a [Leaflet for R](https://rstudio.github.io/leaflet/) that let you use most of the capabilities of Leaflet with your regular R code. To create maps with leaflet you can use *data.frame* objects, *sf* objects, *raster* objects and *json* files. 
 
 Leaflet for R is methodologically easy to use and you can get farther by exploring the arguments of the functions. A nice feature of Leaflet is that is integrated with shiny. 
+
+```{r, eval=FALSE}
+leaflet() %>% addProviderTiles() %>% 
+  addPolygons() %>% 
+  addCircles() %>% 
+  ...
+```
+
+---
+#Some examples
+
+- [The propensity to cycling tool PCT](http://www.pct.bike/m/?r=avon)
+- [PCT website](https://www.pct.bike/)
+- [PCT Github repositories!](https://github.com/npct) 
+- What about a similar tool for Uruguay?
+
+- [Reimagining NYC Neighborhoods with NewerHoods](https://data-clinic.shinyapps.io/newerhoods/) [Repo](https://github.com/tsdataclinic/newerhoods) 
+- [Isolines](https://byollin.shinyapps.io/Isolines/). [Repo](https://github.com/byollin/Isolines)
+- [Water Quality](https://udwq.shinyapps.io/lakeprofiledashboard/)
+- [SpatialEpiApp](https://paulamoraga.shinyapps.io/spatialepiapp/)
+- Is actually an [R package](https://paula-moraga.github.io/blog/2018/01/04/2018-01-04_spatialepiapp/) too. 
 
 ---
 #The sky is the limit!
