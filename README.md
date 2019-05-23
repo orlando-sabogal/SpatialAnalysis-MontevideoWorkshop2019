@@ -15,4 +15,9 @@ I encourage you to go through the Notebooks and digest the code. Eventually, you
 
 Please let me know if you find any mistake or have a suggestion.
 
+### Schedule
+
+Monday 3 - From 14:00 to 16:00 <br/>
+Thursday 6 - From 14:00 to 16:00
+
 ![](logo.png)
