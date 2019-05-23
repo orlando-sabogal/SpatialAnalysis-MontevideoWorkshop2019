@@ -11,6 +11,8 @@ Nevertheless, most of the content is going to be delivered through three tutoria
 - [tmap Tutorial](https://orlando-sabogal.github.io/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/tmap-tutorial.nb.html)
 - [Interactive maps](https://orlando-sabogal.github.io/SpatialAnalysis-MontevideoWorkshop2019/Notebooks/InteractiveMaps.nb.html)
 
-I encourage you to go through the Notebooks and digest the code. Eventually, you can forget the detail of every library or how an specific function works; but if you understand the logic and develop the intuition, is easier to remember and to solve new problems.
+I encourage you to go through the Notebooks and digest the code. Eventually, you can forget the detail of every library or how a specific function works; but if you understand the logic and develop the intuition, is easier to remember and to solve new problems.
 
 Please let me know if you find any mistake or have a suggestion.
+
+![](logo.png)
