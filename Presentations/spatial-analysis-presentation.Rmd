@@ -38,10 +38,27 @@ Introduce myself
 
 ---
 
-#Spatial data is special
+#What is special about spatial data?
 
-###ADD SOME GENERAL INTRO <br/>
-###PROVIDE CONTEXT
+<br/>
+- The title of this slide was taken from [An old but good article](https://escholarship.org/uc/item/3ph5k0d4) by Luc Anselin.
+
+--
+- Tobler's (1979) first law of geography. Have you heard of the second law?
+- What *near* and *distant* mean in a particular context?
+- Data-driven vs model-driven
+
+--
+- What about independece and correlation among observations?
+
+--
+- Computers and geography are in the same team. See [Geography and computers: Past, present, and future](https://onlinelibrary.wiley.com/doi/10.1111/gec3.12403) by Arribas-Bel and Reades 
+- [Goegraphic Data Science article](https://onlinelibrary.wiley.com/doi/full/10.1111/gean.12194) by Singleton and Arriba-bel
+- There is much that geography can learn about data science.
+
+--
+- Data is **NOT ENOUGH** to extract knowledge. 
+
 
 ---
 class: inverse, center, middle

@@ -3,7 +3,9 @@ title: "R Notebook"
 author: "Orlando Sabogal"
 output: 
   html_notebook: 
+    highlight: zenburn
     number_sections: yes
+    theme: yeti
     toc: yes
 ---
 
@@ -13,6 +15,8 @@ library(sf)
 library(tmap)
 ```
 
+<br/>
+<hr/>
 
 #Rudiments
 
@@ -72,11 +76,6 @@ tm_shape(Uruguay, bbox = st_bbox(Montevideo)) +
 ```
 
 
-```{r}
-
-```
-
-
 [Nort Carolina SIDS data](https://nowosad.github.io/spData/reference/nc.sids.html)
 
 ```{r}
@@ -86,6 +85,9 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 ```{r}
 tm_shape(nc) + tm_polygons(col="BIR79")
 ```
+
+<br/>
+<hr/>
 
 #The road to a map
 
@@ -200,12 +202,6 @@ tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") +
     tm_scale_bar(breaks = c(0,50,100,150,200),size = 1, position = c(0.06,0),
                  lwd = 5, color.dark = "darkgreen", color.light = "blue")
 ```
-
-
-```{r}
-
-```
-
 
 ```{r}
 MyMap <- tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84") + 
@@ -332,6 +328,8 @@ tm_shape(nc) + tm_polygons(col="BIR79", title = "Births 1979 - 84", palette = My
                  lwd = 3)
 ```
 
+<br/>
+<hr/>
 
 #Auxiliar map
 
@@ -392,6 +390,8 @@ MontevideoMap
 print(AuxMap, vp = viewport(0.17, 0.8, width = 0.2, height = 0.2))
 ```
 
+<br/>
+<hr/>
 
 #Faceted maps
 
@@ -422,8 +422,4 @@ Map2010 <- tm_shape(Accidents2010) + tm_dots() + Complements
 
 ```{r}
 tmap_arrange(Map2006, Map2010)
-```
-
-```{r}
-
 ```

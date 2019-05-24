@@ -3,7 +3,9 @@ title: "R Notebook"
 author: "Orlando Sabogal"
 output: 
   html_notebook: 
+    highlight: zenburn
     number_sections: yes
+    theme: yeti
     toc: yes
 ---
 
@@ -13,7 +15,7 @@ library(sf)
 library(leaflet)
 ```
 
-Originallyl, Leaflet is a javascript [library](https://leafletjs.com/). If yoy know your way around **js** it goes something like this: 
+Leaflet is a javascript [library](https://leafletjs.com/). If yoy know your way around **js** it goes something like this: 
 
 ```{r,eval=FALSE}
 ##This is javascript code, DO NOT RUN!
@@ -29,7 +31,7 @@ L.marker([51.5, -0.09]).addTo(map)
     .openPopup();
 ```
 
-You should also know to configure a CCS file in the header section of your html file and include Leaflet: 
+You should also know to configure a CCS file and include the Leaflet library in the header section of a html file:
 
 ```{r, eval=FALSE}
 ##This is html code, DO NOT RUN!
@@ -51,10 +53,13 @@ Fortunately, in the [html widgets for R](http://www.htmlwidgets.org/) there is a
 
 Leaflet for R is methodologically easy to use and you can get farther by exploring the arguments of the functions. A nice feature of Leaflet is that is integrated with shiny. 
 
+<br/>
+<hr/>
+
 #Rudiments
 
-To a create a leaflet object you only have to call the **leaflet()** function. If you have an object (think about an *sf*) which you want to plot you should pass it through the function as **leaflet(YourObject)**. To add layers the **%>%** is used before a new function defining a new characteristic of the map. 
-As a backgroung layer leaflet enables to use different maps providers with **addProviderTiles.**
+To create a leaflet object you only have to call the **leaflet()** function. If you have an object (think about an *sf*) which you want to plot you should pass it through the function as **leaflet( -YourObject- )**. To add layers the **%>%** operator is used before a new function defining a new characteristic of the map. 
+As a background layer leaflet enables to use different maps providers with **addProviderTiles** or **addTiles.**
 
 ```{r}
 leaflet() %>% 
@@ -62,7 +67,7 @@ leaflet() %>%
 ```
 
 You can see the Tiles options [here](http://leaflet-extras.github.io/leaflet-providers/preview/). 
-In the previous map you can zoom in and zoom out all aorund the world. You can set the specific view you want with the **setView()** function as in the following examples where the maps are centered in *Plaza de la indepencia* (Montevideo, Uruguay)
+In the previous map you can zoom in and zoom out all around the world. You can set the specific view you want with the **setView()** function as in the following examples where the maps are centred in *Plaza de la indepencia* (Montevideo, Uruguay)
 
 ```{r}
 leaflet() %>% 
@@ -79,7 +84,7 @@ leaflet() %>%
 
 
 
-Of course, tha main benefit of using leaflet is getting your own data into the map. You can add a marker with **addMarkers** an specifying the long and lat coordinates. 
+Of course, the main benefit of using leaflet is getting your own data into the map. You can add a marker with **addMarkers** and specifying the *long* and *lat* arguments 
 
 ```{r}
 leaflet() %>% 
@@ -88,7 +93,7 @@ leaflet() %>%
   addMarkers(-56.199735, -34.906543)
 ```
 
-An you can even assign a popup.
+You can even assign a pop-up by setting the *popup* argument.
 
 ```{r}
 leaflet() %>% 
@@ -97,7 +102,7 @@ leaflet() %>%
   addMarkers(-56.199735, -34.906543, popup = "Plaza Independencia")
 ```
 
-An add many more markers.
+Add many more markers can be a matter of calling the **addMarker** function multiple times. 
 
 ```{r}
 leaflet() %>% 
@@ -108,7 +113,7 @@ leaflet() %>%
 ```
 
 
-It does not make sense to add geographic information one by one; rather, a better option is give to the function an object and atomatically plot all the markers.
+Off course, it does not make sense to add geographic information one by one; rather, a better option is give to the function an object and automatically plot all the markers.
 
 ```{r}
 Sites <- data.frame(longitud = c(-56.199735, -56.198309, -56.201037), 
@@ -122,7 +127,7 @@ leaflet(Sites) %>%
 
 ```
 
-In the last example we configured our data in the **leaflet()** function, but is also possible to do it in the **addMarkers()** function.
+In the last example we configured our data in the **leaflet()** function, but is also possible to do it in the **addMarkers()** function. What do you think is the difference?
 
 ```{r}
 leaflet() %>% 
@@ -141,6 +146,10 @@ leaflet() %>%
   addCircleMarkers(data = Sites, lng = ~longitud, lat = ~lattitud)
 ```
 
+<br/>
+<hr/>
+
+#Points and Circles
 
 But is time to plot more natural "geometric-vectorial" elements as a circle (**addCircles()**)
 
@@ -153,11 +162,7 @@ leaflet() %>%
 ```
 
 
-What is the difference among **addCircleMarker()** and **addCircle().**
-
-
-#Points
-
+What is the difference among **addCircleMarker()** and **addCircle().**?
 
 ```{r}
 leaflet() %>% 
@@ -167,6 +172,7 @@ leaflet() %>%
                    radius = 100, opacity = 1, fillOpacity = 1)
 ```
 
+Within the arguments of the function there are option to set elements like the radius, the opacity or the colour. 
 
 ```{r}
 leaflet() %>% 
@@ -176,7 +182,8 @@ leaflet() %>%
                    radius = 100, opacity = 1, fillOpacity = 0.7, color = "black", fillColor = "green")
 ```
 
-
+<br/>
+<hr/>
 
 #Using our shapes
 
@@ -198,11 +205,14 @@ Uruguay <- st_transform(Uruguay,4326)
 Accidents = st_transform(Accidents, 4326)
 ```
 
+Intuitively, perhaps you already know that to get our Uruguay map we only need to use the **leaflet()** function, pass the **sf** object and then use the specific function to create areas. This function is **addPolygons().**
+
 ```{r}
 leaflet(Uruguay) %>% 
   addPolygons()
 ```
 
+And then again, a tile can provide some context to your map. 
 
 ```{r}
 leaflet(Uruguay) %>% 
@@ -223,6 +233,7 @@ leaflet(Uruguay) %>%
   addPolygons(color = "black", weight = 2, fillColor = "white")
 ```
 
+A taste of the power of Leaflet is in highlighting the polygons of the shape and perform some operations. 
 
 ```{r}
 leaflet(Uruguay) %>% 
@@ -244,7 +255,7 @@ leaflet(Uruguay) %>%
 ```
 
 
-Once you get used to leaflet you realize that is easy to create awosome maps. You may struggle a little bit with the inside function-arguments and probably will iterate a few times, but you will get it done. 
+After you get used to leaflet you realize that is easy to create awesome maps. You may struggle a little  with the inside function-arguments and probably will iterate a few times, but you will get it done. 
 
 ```{r}
 #source: https://rstudio.github.io/leaflet/choropleths.html &
@@ -298,9 +309,6 @@ leaflet(states) %>%
 
 ```
 
-
-
-#Points
 
 ```{r}
 Accidents2009 <- Accidents %>% filter(ANIO == "2009")
